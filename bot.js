@@ -1,25 +1,21 @@
 const Discord    =  require("discord.js"),
       bot        =  new Discord.Client(),
       prefix     =  ">",
-      token      =  "NDA0MDM4NzIzOTM2OTc2ODk2.DUQB6g.wlqEXd_7tgr64psDm-qevl-ZbWg";
+      token      =  "(TOKEN IS HIDDEN SO NO ONE TAKES)";
 
 bot.on('ready', () => {
     console.log("ok im working now lol");
 });
 
 bot.on("message", message => {
-    //ignores message if the bot sent it
     if(message.author.bot) return;
-    //ignores message if it's in dms (not in a guild)
     if (!message.guild) return;
-    //ignores message if it doesn't start with the prefix
     if(message.content.indexOf(prefix) !== 0) return;
     
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     if(command === "lemon") {
-      //sends message
       message.channel.send(`hi that me ${message.author}`);
     }
 
