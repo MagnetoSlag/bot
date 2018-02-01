@@ -277,6 +277,9 @@ Bot.on('message', (message) => {
                 for (var i = 1; i < OrderBook.OrderNumber.length; i++) {
                     if (OrderBook.OrderNumber[i].OrderTag == TempTag) {            
                         if (OrderBook.OrderNumber[i].Status == "unclaim") {
+                            //Edit by Pa
+                            OrderTagFound = 1;                  //this is to prevent a record not found msg trigger below
+                            //Edit by Pa
                             orderInfo = new Discord.RichEmbed()
                             .setColor("#ffefbf")
                             .setDescription('[Order Information](https://google.ie/)')
@@ -288,6 +291,9 @@ Bot.on('message', (message) => {
                             .setThumbnail(message.author.avatarURL)
                             message.channel.send(orderInfo)
                         } else {
+                            //Edit by Pa
+                            OrderTagFound = 1;                  //this is to prevent a record not found msg trigger below
+                            //Edit by Pa
                             orderInfo = new Discord.RichEmbed()
                             .setColor("#ffefbf")
                             .setDescription('[Order Information](https://google.ie/)')
