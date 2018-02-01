@@ -103,35 +103,45 @@ Bot.on('message', (message) => {
                     FromServer: "",
                     Status: ""
                 };
-
-                let ItemPlaced = message.content.replace(">order", "");
-                ItemPlaced.trim();
-                ShoppingCart.OrderTag = GenOrderTag();
-                ShoppingCart.Particulars = ItemPlaced;
-                ShoppingCart.Customer = message.author.username;
-                ShoppingCart.CustomerID = message.author.id;
-                ShoppingCart.FromServer = message.guild.name;
-                ShoppingCart.Status = "unclaim";
-
-                OrderBook.OrderNumber.push(ShoppingCart);
-                FileHandle.writeFileSync("./ShopOrder.json", JSON.stringify(OrderBook), (err) => {
-                if (err) {
-                         console.error(err);
-                        message.channel.send("Sorry, your order couldn't be placed! Please try again! (This is not a blacklist error.)");
-                    } 
-                });
-                const lemChannel = Bot.channels.find("id", "403129323483037707");
-                newOrder = new Discord.RichEmbed()
-                .setColor("#ffefbf")
-                .setDescription('[order information](https://google.ie/)')
-                .addField(`Order`, message.content.replace('>order ', ''), true)
-                .addField(`Customer`, `${message.author.username} | ${message.author.id}`, true)
-                .addField(`Server`, `${message.guild.name} | ${message.guild.id}`, true)
-                .addField(`Order Number`, `${ShoppingCart.OrderTag}`, true)
-                .setThumbnail(message.author.avatarURL)
-                lemChannel.send(newOrder)
-                message.channel.send(`Thank you for ordering **${ItemPlaced}**!`);
-                message.channel.send(`Your order has been placed with ID: ${ShoppingCart.OrderTag}`);
+                //Edit by pa
+                //Place previous undelivered order check before entering new order below
+                var HasUnprocessedOrder = 0;
+                for (var i = 0; i = OrderBook.OrderNumber.length; i++ {
+                     if(OrderBook.OrderNumber[i].CustomerID == message.author.id){
+                        HasUnprocessedOrder = 1;
+                     }
+                }
+                if (HasUnprocessedOrder == 0){  
+                //Edit by pa    
+                    let ItemPlaced = message.content.replace(">order", "");
+                    ItemPlaced.trim();
+                    ShoppingCart.OrderTag = GenOrderTag();
+                    ShoppingCart.Particulars = ItemPlaced;
+                    ShoppingCart.Customer = message.author.username;
+                    ShoppingCart.CustomerID = message.author.id;
+                    ShoppingCart.FromServer = message.guild.name;
+                    ShoppingCart.Status = "unclaim";
+                    
+                    OrderBook.OrderNumber.push(ShoppingCart);
+                    FileHandle.writeFileSync("./ShopOrder.json", JSON.stringify(OrderBook), (err) => {
+                    if (err) {
+                            console.error(err);
+                            message.channel.send("Sorry, your order couldn't be placed! Please try again! (This is not a blacklist error.)");
+                        } 
+                    });
+                    const lemChannel = Bot.channels.find("id", "403129323483037707");
+                    newOrder = new Discord.RichEmbed()
+                    .setColor("#ffefbf")
+                    .setDescription('[order information](https://google.ie/)')
+                    .addField(`Order`, message.content.replace('>order ', ''), true)
+                    .addField(`Customer`, `${message.author.username} | ${message.author.id}`, true)
+                    .addField(`Server`, `${message.guild.name} | ${message.guild.id}`, true)
+                    .addField(`Order Number`, `${ShoppingCart.OrderTag}`, true)
+                    .setThumbnail(message.author.avatarURL)
+                    lemChannel.send(newOrder)
+                    message.channel.send(`Thank you for ordering **${ItemPlaced}**!`);
+                    message.channel.send(`Your order has been placed with ID: ${ShoppingCart.OrderTag}`);
+                }   //edit by pa
             } else {
                  return message.channel.send("Please order something! You wouldn't like an empty plate, would you?");
             }
@@ -277,6 +287,9 @@ Bot.on('message', (message) => {
                 for (var i = 1; i < OrderBook.OrderNumber.length; i++) {
                     if (OrderBook.OrderNumber[i].OrderTag == TempTag) {            
                         if (OrderBook.OrderNumber[i].Status == "unclaim") {
+                            //Edit by Pa
+                            OrderTagFound = 1;                  //this is to prevent a record not found msg trigger below
+                            //Edit by Pa
                             orderInfo = new Discord.RichEmbed()
                             .setColor("#ffefbf")
                             .setDescription('[Order Information](https://google.ie/)')
@@ -288,6 +301,9 @@ Bot.on('message', (message) => {
                             .setThumbnail(message.author.avatarURL)
                             message.channel.send(orderInfo)
                         } else {
+                            //Edit by Pa
+                            OrderTagFound = 1;                  //this is to prevent a record not found msg trigger below
+                            //Edit by Pa
                             orderInfo = new Discord.RichEmbed()
                             .setColor("#ffefbf")
                             .setDescription('[Order Information](https://google.ie/)')
